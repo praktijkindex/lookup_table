@@ -1,4 +1,4 @@
-require "benchmark"
+require "active_record"
 
 module LookupTable
 
@@ -88,15 +88,10 @@ module LookupTable
 
   def prefetch_if_requested hash
     if prefetch?
-      time = Benchmark.realtime do
-        lookup_domain.inject(hash) do |hash,record|
-          hash[ record_key(record) ] = record_value(record)
-          hash
-        end
+      lookup_domain.inject(hash) do |hash,record|
+        hash[ record_key(record) ] = record_value(record)
+        hash
       end
-      logger.info "Prefetched %6d records in %5.1f sec from %s" % [hash.count, time, table_name]
-    else
-      logger.info "Using #{table_name} without prefetching"
     end
     hash
   end

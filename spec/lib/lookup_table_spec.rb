@@ -1,16 +1,6 @@
+require "lookup_table"
+
 describe LookupTable do
-  before :all do
-    PsqlSchema.drop 'lookup_tables' if PsqlSchema.exists? 'lookup_tables'
-    PsqlSchema.create 'lookup_tables'
-  end
-  around(:each) do |example|
-    PsqlSchema.with_path 'lookup_tables' do
-      example.run
-    end
-  end
-  after :all do
-    PsqlSchema.drop 'lookup_tables'
-  end
   shared_context "with mapping table" do
     around(:each) do |example|
       create_mapping_table(subject, table_content)
@@ -39,35 +29,35 @@ describe LookupTable do
   end
 
   describe "simple lookup table" do
-    subject { LookupTable.create 'lookup_tables.mapping', :key, :value }
+    subject { LookupTable.create 'mapping', :key, :value }
     include_context "with mapping table"
     include_context "simple content"
     include_context "nil default"
     it_behaves_like "lookup table"
   end
   describe "mixed case columns" do
-    subject { LookupTable.create 'lookup_tables.mapping', :KeyColumn, :ValueColumn }
+    subject { LookupTable.create 'mapping', :KeyColumn, :ValueColumn }
     include_context "with mapping table"
     include_context "simple content"
     include_context "nil default"
     it_behaves_like "lookup table"
   end
   describe "with default value" do
-    subject { LookupTable.create 'lookup_tables.mapping', :key, :value, default: 'default' }
+    subject { LookupTable.create 'mapping', :key, :value, default: 'default' }
     include_context "with mapping table"
     include_context "simple content"
     let(:default_value) { 'default' }
     it_behaves_like "lookup table"
   end
   describe "with computed default" do
-    subject { LookupTable.create 'lookup_tables.mapping', :key, :value, default: proc{|k| k/6} }
+    subject { LookupTable.create 'mapping', :key, :value, default: proc{|k| k/6} }
     include_context "with mapping table"
     include_context "simple content"
     let(:default_value) { 111 }
     it_behaves_like "lookup table"
   end
   describe "with compound key" do
-    subject { LookupTable.create 'lookup_tables.mapping', [:key1, :key2] , :value }
+    subject { LookupTable.create 'mapping', [:key1, :key2] , :value }
     include_context "with mapping table"
     include_context "nil default"
     let(:table_content) { [[1,2,'foo'],[2,2,'bar'],[42,2,'answer']] }
@@ -75,7 +65,7 @@ describe LookupTable do
     it_behaves_like "lookup table"
   end
   describe "simple lookup table without prefetching" do
-    subject { LookupTable.create 'lookup_tables.mapping', :key, :value, prefetch: false }
+    subject { LookupTable.create 'mapping', :key, :value, prefetch: false }
     include_context "with mapping table"
     include_context "simple content"
     include_context "nil default"
