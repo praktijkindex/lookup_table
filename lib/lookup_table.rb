@@ -38,7 +38,13 @@ module LookupTable
   end
 
   def [] *keys
+    check_table_exists!
     lookup_table[ keys.flatten ]
+  end
+
+  def check_table_exists!
+    @table_exists ||= table_exists?
+    raise "No such table #{table_name}" unless @table_exists
   end
 
   def lookup_table
