@@ -94,7 +94,7 @@ module LookupTable
 
   def prefetch_if_requested hash
     if prefetch?
-      lookup_domain.inject(hash) do |hash,record|
+      lookup_domain.all.inject(hash) do |hash,record|
         hash[ record_key(record) ] = record_value(record)
         hash
       end
