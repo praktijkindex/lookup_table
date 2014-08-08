@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lookup_table (0.0.1)
+    lookup_table (0.0.2)
       activerecord
 
 GEM
