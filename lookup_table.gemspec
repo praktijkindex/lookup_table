@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'activerecord'
+  s.add_runtime_dependency 'activerecord', '~> 3.2.18'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'bundler', '~> 1.3'
